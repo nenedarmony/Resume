@@ -212,7 +212,7 @@ app.post("/api/match", async (req, res) => {
     if (jdLower.includes("vue")) {
       potentialGaps.push("Your requirements mention Vue. Nechama's primary focus is enterprise Angular architectures, but she is highly proficient in TypeScript and standard SPA state flows.");
     }
-    if (jdLower.includes("python") || jdLower.includes("django") || jdLower.includes("flask")) {
+    if (jdLower.includes("python") || jdLower.includes("django") || jdLower.includes("flask") || jdLower.includes("fastapi") || jdLower.includes("פייטון")) {
       potentialGaps.push("Mention of Python backend frameworks. Nechama's backend expertise is heavily centered on TypeScript/Node.js/NestJS.");
     }
     if (jdLower.includes("java") || jdLower.includes("spring")) {
@@ -269,15 +269,79 @@ app.post("/api/match", async (req, res) => {
       }
     }
 
-    let fitScore = 90;
-    if (jdLower.includes("angular") && (jdLower.includes("nestjs") || jdLower.includes("node") || jdLower.includes("backend"))) {
-      fitScore = 98;
-    } else if (jdLower.includes("angular")) {
-      fitScore = 95;
-    } else if (jdLower.includes("nestjs") || jdLower.includes("node") || jdLower.includes("aws") || jdLower.includes("security") || jdLower.includes("distributed")) {
-      fitScore = 95;
-    } else if (jdLower.includes("react") || jdLower.includes("vue") || jdLower.includes("java") || jdLower.includes("python")) {
-      fitScore = 78;
+    // Dynamic, high-precision mathematical scoring calculation
+    let baseScore = 0;
+    if (jdLower.includes("angular")) { baseScore += 35; }
+    if (jdLower.includes("typescript") || jdLower.includes("ts")) { baseScore += 15; }
+    if (jdLower.includes("nest") || jdLower.includes("nestjs")) { baseScore += 30; }
+    if (jdLower.includes("node") || jdLower.includes("nodejs")) { baseScore += 20; }
+    if (jdLower.includes("aws") || jdLower.includes("cloud") || jdLower.includes("lambda") || jdLower.includes("sqs")) { baseScore += 15; }
+    if (jdLower.includes("mongo") || jdLower.includes("mongodb") || jdLower.includes("postgres") || jdLower.includes("postgresql") || jdLower.includes("mysql") || jdLower.includes("sql")) { baseScore += 10; }
+    if (jdLower.includes("docker") || jdLower.includes("jenkins") || jdLower.includes("devops") || jdLower.includes("pipeline")) { baseScore += 10; }
+
+    // If the JD contains full stack keywords but no direct match of primary stack, give a small baseline
+    if (baseScore === 0 && (jdLower.includes("full") || jdLower.includes("stack") || jdLower.includes("engineer") || jdLower.includes("developer") || jdLower.includes("programmer") || jdLower.includes("software"))) {
+      baseScore = 25;
+    }
+
+    // Mismatch deduction factors
+    let penaltyRatio = 0.0;
+    if ((jdLower.includes("python") || jdLower.includes("django") || jdLower.includes("flask") || jdLower.includes("fastapi") || jdLower.includes("פייטון")) && !jdLower.includes("copilot")) {
+      penaltyRatio += 0.50;
+    }
+    if ((jdLower.includes("react") || jdLower.includes("reactjs")) && !jdLower.includes("angular")) {
+      penaltyRatio += 0.35;
+    }
+    if (jdLower.includes("vue") && !jdLower.includes("angular")) {
+      penaltyRatio += 0.35;
+    }
+    const cleanJava = jdLower.replace(/javascript/g, "").replace(/typescript/g, "");
+    if (cleanJava.includes("java") || jdLower.includes("spring") || jdLower.includes("boot")) {
+      penaltyRatio += 0.50;
+    }
+    if (jdLower.includes("c#") || jdLower.includes(".net") || jdLower.includes("asp.net")) {
+      penaltyRatio += 0.50;
+    }
+    if (jdLower.includes("php") || jdLower.includes("laravel")) {
+      penaltyRatio += 0.50;
+    }
+    if (jdLower.includes("c++") || jdLower.includes("cpp")) {
+      penaltyRatio += 0.50;
+    }
+    if (jdLower.includes("ruby") || jdLower.includes("rails")) {
+      penaltyRatio += 0.35;
+    }
+    
+    // Check for "go" as a word to avoid sub-word matching like "go-to"
+    const wordsList = jdLower.split(/\W+/);
+    if (wordsList.includes("go") || wordsList.includes("golang")) {
+      penaltyRatio += 0.35;
+    }
+
+    // Apply multiplier-based reduction to base score
+    let fitScore = Math.round(baseScore * (1 - Math.min(0.95, penaltyRatio)));
+    fitScore = Math.max(5, Math.min(98, fitScore));
+
+    // Handle single-word / extremely short searches (e.g. "python" or "angular")
+    const searchTerms = jdLower.trim().split(/\s+/);
+    if (searchTerms.length <= 3) {
+      let matchedAny = false;
+      const mainKeywords = ["angular", "typescript", "ts", "nest", "nestjs", "node", "nodejs", "aws", "docker", "mongo", "mongodb", "postgres", "mysql", "sql"];
+      for (const term of searchTerms) {
+        const cleanTerm = term.replace(/[^a-zA-Z\u0590-\u05fe]/g, "");
+        if (mainKeywords.includes(cleanTerm)) {
+          matchedAny = true;
+        }
+      }
+      if (!matchedAny) {
+        fitScore = 5; // Absolute minimum score for irrelevant brief keywords
+      } else {
+        if (jdLower.includes("angular") || jdLower.includes("nestjs")) {
+          fitScore = 95;
+        } else {
+          fitScore = Math.max(60, fitScore);
+        }
+      }
     }
 
     return {
@@ -309,6 +373,17 @@ app.post("/api/match", async (req, res) => {
 Compare the following Job Description with Nechama Darmoni's Resume.
 Identify Strong Matches, Potential Gaps, Relevant Projects, Relevant Technologies from her actual stack, suggested interview questions, a fit score (0-100), and a brief executive summary.
 
+STRICT FIT SCORE CALIBRATION RULES:
+- You MUST evaluate the fit score with absolute integrity, realism, and precision. If the job description represents a complete mismatch, do NOT award a high score.
+- The score MUST be mathematically realistic and strict:
+  * Baseline Stack Match (95-98%): Job description specifically requests Nechama's direct primary stack (Angular frontend AND NestJS/Node.js backend, on AWS).
+  * Strong Match (85-94%): Job description requests Angular or NestJS/Node.js/AWS with some secondary skills.
+  * Moderate Match (60-84%): General web full-stack roles (TypeScript, REST APIs, general backend, databases) with some framework gaps.
+  * Weak Match (30-59%): Roles requesting other frontend frameworks like React or Vue as core requirements (where she has to adapt from Angular), or general cloud/DevOps roles.
+  * Irrelevant / Mismatch (0-29%): Roles centered primarily on backend stacks she does NOT have on her resume (such as Python/Django/Flask, Java/Spring Boot, C#/.NET, Go, Ruby, PHP, or C++) or single-word keyword checks like "Python" or "Java". If a core required language is Python, and she doesn't know Python, the fit score MUST be between 5% and 20% max.
+- If the job description is extremely short or consists of only a single skill like "Python" or "Java" which is not on her resume, the fit score MUST be extremely low (0-15%).
+- Be strict. A high score (like 85%) for a pure Python search will be flagged as an AI failure. Be extremely honest and realistic.
+
 STRICT GAP EVALUATION RULES:
 - NEVER invent, speculate, or guess missing requirements that are not explicitly stated in the Job Description. 
 - Do NOT list "unspecified backend", "unspecified UI libraries", "lack of state management detail", or "unspecified databases" as gaps. If the job description is short or high-level, do NOT complain about it or call it a gap.
@@ -329,7 +404,7 @@ ${jobDescription}
 
     const response = await generateContentWithFallback({
       contents: prompt,
-      systemInstruction: "You are an elite Head of Engineering evaluating a candidate's resume strictly against a job description. Provide realistic comparison metrics. Never exaggerate or invent gaps that aren't explicitly requested in the job description. Keep potential gaps extremely concise, only focusing on explicit tech mismatches with brief alternatives.",
+      systemInstruction: "You are an elite Head of Engineering evaluating a candidate's resume strictly against a job description. Provide realistic comparison metrics. Never exaggerate or invent gaps that aren't explicitly requested in the job description. Keep potential gaps extremely concise, only focusing on explicit tech mismatches with brief alternatives. If the stack is a mismatch (e.g., requests Python but candidate lacks Python), assign a very low fit score.",
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
