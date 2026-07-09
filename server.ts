@@ -3,7 +3,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
-import { resumeData } from "./src/data/resumeData";
+import { resumeData } from "./src/data/resumeData.js";
 
 dotenv.config();
 
