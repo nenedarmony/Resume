@@ -1,0 +1,8 @@
+{
+  "name": "AI Resume and Job Matcher",
+  "description": "A professional AI-powered resume, job description matcher, and interactive chat assistant for a Senior Full Stack Engineer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
