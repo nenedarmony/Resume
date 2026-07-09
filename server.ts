@@ -3,7 +3,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
-import { resumeData } from "./src/data/resumeData.js";
+import { resumeData } from "./src/data/resumeData";
 
 dotenv.config();
 
@@ -118,6 +118,15 @@ ${resumeData.projects.map(proj => `
   ${proj.highlights.map(h => `  - ${h}`).join("\n")}
 `).join("\n")}
 `;
+
+// API: Configuration and AI status check
+app.get("/api/status", (req, res) => {
+  res.json({
+    aiInitialized: !!process.env.GEMINI_API_KEY,
+    provider: "Google Gemini",
+    instructions: "Please set the GEMINI_API_KEY environment variable in your AI Studio Settings > Secrets panel or your Cloud Run / Vercel deployment dashboard."
+  });
+});
 
 // API: Match Resume to Job Description
 app.post("/api/match", async (req, res) => {
@@ -379,7 +388,11 @@ ${jobDescription}
       timeoutMs: 6000
     });
 
-    const parsedData = JSON.parse(response.text || "{}");
+    let rawText = (response.text || "{}").trim();
+    if (rawText.startsWith("```")) {
+      rawText = rawText.replace(/^```[a-zA-Z]*\n/, "").replace(/\n```$/, "").trim();
+    }
+    const parsedData = JSON.parse(rawText);
     return res.json(parsedData);
   } catch (error) {
     console.log("[Status] Utilizing local backup alignment engine.");

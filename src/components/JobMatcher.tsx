@@ -60,7 +60,14 @@ export default function JobMatcher() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to compare the resume and job description.");
+        let errMsg = "Failed to compare the resume and job description.";
+        try {
+          const errData = await response.json();
+          if (errData && errData.error) {
+            errMsg = errData.error;
+          }
+        } catch (_) {}
+        throw new Error(errMsg);
       }
 
       const data = await response.json();

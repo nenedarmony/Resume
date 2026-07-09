@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Hero from "./components/Hero";
 import JobMatcher from "./components/JobMatcher";
 import ExperienceExplorer from "./components/ExperienceExplorer";
@@ -16,6 +16,14 @@ import { resumeData } from "./data/resumeData";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>("resume");
+  const [aiStatus, setAiStatus] = useState<{ aiInitialized: boolean; provider: string; instructions: string } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/status")
+      .then((res) => res.json())
+      .then((data) => setAiStatus(data))
+      .catch((err) => console.error("Failed to fetch AI status:", err));
+  }, []);
 
   const handleNavigate = (target: string) => {
     if (target === "experience") {
@@ -111,6 +119,23 @@ export default function App() {
           </nav>
         </div>
       </header>
+
+      {/* AI Key Configuration Banner */}
+      {aiStatus && !aiStatus.aiInitialized && (
+        <div className="bg-amber-50/90 border-b border-amber-200/70 text-amber-900 px-4 py-2 text-xs sm:text-sm shadow-2xs">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 relative shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+              </span>
+              <p className="font-medium text-slate-800">
+                <strong>Demo Mode Active:</strong> Live {aiStatus.provider} matching is offline. {aiStatus.instructions}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
  
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
