@@ -41,7 +41,7 @@ export default function App() {
     <div className="min-h-screen bg-slate-50/50 flex flex-col justify-between font-sans selection:bg-slate-900 selection:text-white">
       
       {/* Top Banner Contact Information & Links */}
-      <div className="bg-slate-950 text-slate-300 py-3 px-4 border-b border-slate-900 text-xs sm:text-sm">
+      <div className="bg-slate-950 text-slate-300 py-3 px-4 border-b border-slate-900 text-xs sm:text-sm print:hidden">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
           <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
             <span className="flex items-center gap-1.5 hover:text-white transition cursor-default text-xs font-semibold font-mono">
@@ -73,7 +73,7 @@ export default function App() {
       </div>
 
       {/* Main SaaS Navbar */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 print:hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <button 
             onClick={() => setActiveTab("resume")}
@@ -93,7 +93,7 @@ export default function App() {
           </button>
  
           {/* Tab Navigation */}
-          <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
+          <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto shrink-0">
             <button
               onClick={() => setActiveTab("resume")}
               className={`px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider font-mono transition shrink-0 cursor-pointer flex items-center gap-1.5 ${
@@ -122,7 +122,7 @@ export default function App() {
 
       {/* AI Key Configuration Banner */}
       {aiStatus && !aiStatus.aiInitialized && (
-        <div className="bg-amber-50/90 border-b border-amber-200/70 text-amber-900 px-4 py-2 text-xs sm:text-sm shadow-2xs">
+        <div className="bg-amber-50/90 border-b border-amber-200/70 text-amber-900 px-4 py-2 text-xs sm:text-sm shadow-2xs print:hidden">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="flex h-2 w-2 relative shrink-0">
@@ -138,11 +138,11 @@ export default function App() {
       )}
  
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 print:py-0 print:my-0">
         {activeTab === "resume" && (
-          <div className="space-y-16">
+          <div className="space-y-16 print:space-y-12">
             <Hero onNavigate={handleNavigate} />
-            <div id="experience-section" className="border-t border-slate-200/85 pt-16">
+            <div id="experience-section" className="border-t border-slate-200/85 pt-16 print:pt-6 print:mt-6 print:border-t-0">
               <ExperienceExplorer />
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white py-12 px-4 sm:px-6 lg:px-8 text-slate-500 text-sm">
+      <footer className="border-t border-slate-200 bg-white py-12 px-4 sm:px-6 lg:px-8 text-slate-500 text-sm print:hidden">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="space-y-1 text-center md:text-left">
             <p className="font-extrabold text-slate-900 font-mono text-sm">{resumeData.name}</p>

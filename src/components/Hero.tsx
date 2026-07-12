@@ -44,7 +44,7 @@ export default function Hero({ onNavigate }: HeroProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="flex flex-col sm:flex-row gap-3 pt-2"
+            className="flex flex-col sm:flex-row gap-3 pt-2 print:hidden"
           >
             <button
               id="cta-match-job"

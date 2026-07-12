@@ -22,275 +22,282 @@ export default function ExperienceExplorer() {
     "projects" | "skills" | "cloud" | "architecture" | "mobile" | "leadership" | "security"
   >("projects");
 
+  const renderProjects = () => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {resumeData.projects.map((proj, idx) => (
+        <div
+          key={idx}
+          className="bg-white border border-slate-200 rounded-xl p-5 shadow-3xs flex flex-col justify-between space-y-6 hover:shadow-xs transition duration-150 break-inside-avoid"
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="p-2 bg-indigo-50 text-indigo-600 rounded-lg print:hidden">
+                <FolderKanban className="w-4 h-4" />
+              </span>
+              <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase">
+                Enterprise Project
+              </span>
+            </div>
+
+            <div className="space-y-1.5">
+              <h4 className="font-extrabold text-slate-900 text-base">{proj.name}</h4>
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                {proj.description}
+              </p>
+            </div>
+
+            {/* Badges */}
+            <div className="flex flex-wrap gap-1.5">
+              {proj.technologies.map((tech, tIdx) => (
+                <span
+                  key={tIdx}
+                  className="px-2 py-0.5 bg-slate-50 border border-slate-200 text-slate-600 rounded-md text-[10px] font-mono font-semibold"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Highlights */}
+          <div className="space-y-2 pt-3 border-t border-slate-100">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Deliverables</p>
+            <ul className="space-y-1.5">
+              {proj.highlights.map((h, hIdx) => (
+                <li key={hIdx} className="flex gap-2 items-start text-xs text-slate-600 leading-relaxed">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                  <span className="font-medium">{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderSkills = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 break-inside-avoid">
+        <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
+          <Code className="w-4 h-4 text-indigo-500" />
+          Frontend Core
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {resumeData.skills.frontend.map((s, idx) => (
+            <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 break-inside-avoid">
+        <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
+          <Cpu className="w-4 h-4 text-violet-500" />
+          Backend Core
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {resumeData.skills.backend.map((s, idx) => (
+            <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 break-inside-avoid">
+        <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
+          <Network className="w-4 h-4 text-emerald-500" />
+          Database Engines
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {resumeData.skills.databases.map((s, idx) => (
+            <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 break-inside-avoid">
+        <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
+          <Award className="w-4 h-4 text-amber-500" />
+          AI Engineering tools
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {resumeData.skills.ai.map((s, idx) => (
+            <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderCloud = () => (
+    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 break-inside-avoid">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0 print:hidden">
+          <Cloud className="w-6 h-6" />
+        </div>
+        <div className="space-y-1">
+          <h4 className="font-extrabold text-slate-950 text-base">AWS Cloud Infrastructure</h4>
+          <p className="text-xs text-slate-500 font-medium">Experienced in constructing fully automated, serverless, and robust hosting environments on Amazon Web Services.</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+        {resumeData.skills.cloud.map((service, idx) => (
+          <div key={idx} className="p-3 bg-slate-50 border border-slate-150 rounded-lg text-center space-y-1">
+            <span className="text-xs font-bold text-slate-800 font-mono">{service}</span>
+            <p className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">AWS Platform</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="p-4 bg-slate-50 border border-slate-250/50 rounded-xl space-y-1.5">
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">Featured Cloud Integration:</span>
+        <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+          Designed secure WhatsApp Meta receptors running serverless AWS Lambda pipelines triggered by API Gateway endpoints with Cognito Identity and S3 backups.
+        </p>
+      </div>
+    </div>
+  );
+
+  const renderArchitecture = () => (
+    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 break-inside-avoid">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-violet-50 text-violet-600 rounded-xl shrink-0 print:hidden">
+          <Layers className="w-6 h-6" />
+        </div>
+        <div className="space-y-1">
+          <h4 className="font-extrabold text-slate-950 text-base">Enterprise Systems Architecture</h4>
+          <p className="text-xs text-slate-500 font-medium">Designing maintainable, decoupled architectures before writing code. Focus on clean domain boundaries and reuse.</p>
+        </div>
+      </div>
+
+      <div className="space-y-3.5 pt-2">
+        <div className="flex gap-3 items-start text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
+          <span className="font-semibold text-slate-700">Refactored node configurations across systems to transition flawlessly from Node.js 14 backends to modern Node.js 20 frameworks.</span>
+        </div>
+        <div className="flex gap-3 items-start text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
+          <span className="font-semibold text-slate-700">Designed structured database models (MongoDB, MySQL, and PostgreSQL) supporting scalable entity schemas with zero runtime performance hits.</span>
+        </div>
+        <div className="flex gap-3 items-start text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
+          <span className="font-semibold text-slate-700">Architected highly resilient Spain Mining digital platform handling mission-critical, real-time enterprise operations.</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderMobile = () => (
+    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 break-inside-avoid">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0 print:hidden">
+          <Smartphone className="w-6 h-6" />
+        </div>
+        <div className="space-y-1">
+          <h4 className="font-extrabold text-slate-950 text-base">Mobile Development & Support</h4>
+          <p className="text-xs text-slate-500 font-medium">Building and maintaining hybrid mobile capabilities and production configurations for Android and iOS devices.</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="p-4 bg-slate-50 border border-slate-150 rounded-xl space-y-1">
+          <span className="font-bold text-slate-800 text-xs sm:text-sm">Android Applications</span>
+          <p className="text-xs text-slate-500 font-medium leading-relaxed">Production deployments, client-side caching integrations, and device configurations for enterprise users.</p>
+        </div>
+        <div className="p-4 bg-slate-50 border border-slate-150 rounded-xl space-y-1">
+          <span className="font-bold text-slate-800 text-xs sm:text-sm">iOS Applications</span>
+          <p className="text-xs text-slate-500 font-medium leading-relaxed">App Store deployment pipeline management, push notifications delivery, and responsive native UI layout design.</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderLeadership = () => (
+    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 break-inside-avoid">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0 print:hidden">
+          <Award className="w-6 h-6" />
+        </div>
+        <div className="space-y-1">
+          <h4 className="font-extrabold text-slate-950 text-base">Technical Leadership & DevOps Referent</h4>
+          <p className="text-xs text-slate-500 font-medium">Leading migrations, managing stakeholder expectations, and acting as DevOps referent inside ICL.</p>
+        </div>
+      </div>
+
+      <div className="space-y-3 pt-2">
+        <div className="p-4 bg-slate-50 border border-slate-150 rounded-lg flex gap-3 items-start">
+          <span className="px-2.5 py-1 bg-white border border-slate-200 text-indigo-700 font-bold font-mono text-xs rounded uppercase tracking-wider shrink-0">
+            DevOps
+          </span>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
+            Serving as DevOps Referent. Standardizing CI/CD with Jenkins, containerizing infrastructure using Docker, and optimizing deployment speeds.
+          </p>
+        </div>
+        <div className="p-4 bg-slate-50 border border-slate-150 rounded-lg flex gap-3 items-start">
+          <span className="px-2.5 py-1 bg-white border border-slate-200 text-indigo-700 font-bold font-mono text-xs rounded uppercase tracking-wider shrink-0">
+            Hitech
+          </span>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
+            Operating as an elite Hitech Contractor inside ICL, navigating complex enterprise hierarchies to deploy high-value platform modernizations.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSecurity = () => (
+    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6 break-inside-avoid">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-rose-50 text-rose-600 rounded-xl shrink-0 print:hidden">
+          <ShieldAlert className="w-6 h-6" />
+        </div>
+        <div className="space-y-1">
+          <h4 className="font-extrabold text-slate-950 text-base">Security & Authentication Standards</h4>
+          <p className="text-xs text-slate-500 font-medium">Securing APIs, configuring identity providers, and preventing standard authorization bypass issues.</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-lg space-y-1">
+          <span className="text-xs font-bold text-slate-900 block font-mono">OAuth2 & MSAL</span>
+          <p className="text-[10px] text-slate-500 font-medium">Standardized client-side and server-side federation protocols.</p>
+        </div>
+        <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-lg space-y-1">
+          <span className="text-xs font-bold text-slate-900 block font-mono">Cognito Login</span>
+          <p className="text-[10px] text-slate-500 font-medium">Passwordless and multi-factor authentication implementations.</p>
+        </div>
+        <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-lg space-y-1">
+          <span className="text-xs font-bold text-slate-900 block font-mono">API Security</span>
+          <p className="text-[10px] text-slate-500 font-medium">Lambda Authorizers, signature verifications, and CORS protection policies.</p>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderContent = () => {
     switch (activeCategory) {
       case "projects":
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {resumeData.projects.map((proj, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-slate-200 rounded-xl p-5 shadow-3xs flex flex-col justify-between space-y-6 hover:shadow-xs transition duration-150"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-                      <FolderKanban className="w-4 h-4" />
-                    </span>
-                    <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase">
-                      Enterprise Project
-                    </span>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <h4 className="font-extrabold text-slate-900 text-base">{proj.name}</h4>
-                    <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                      {proj.description}
-                    </p>
-                  </div>
-
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {proj.technologies.map((tech, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="px-2 py-0.5 bg-slate-50 border border-slate-200 text-slate-600 rounded-md text-[10px] font-mono font-semibold"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Highlights */}
-                <div className="space-y-2 pt-3 border-t border-slate-100">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Deliverables</p>
-                  <ul className="space-y-1.5">
-                    {proj.highlights.map((h, hIdx) => (
-                      <li key={hIdx} className="flex gap-2 items-start text-xs text-slate-600 leading-relaxed">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                        <span className="font-medium">{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-        );
-
+        return renderProjects();
       case "skills":
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
-              <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
-                <Code className="w-4 h-4 text-indigo-500" />
-                Frontend Core
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {resumeData.skills.frontend.map((s, idx) => (
-                  <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
-              <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-violet-500" />
-                Backend Core
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {resumeData.skills.backend.map((s, idx) => (
-                  <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
-              <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
-                <Network className="w-4 h-4 text-emerald-500" />
-                Database Engines
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {resumeData.skills.databases.map((s, idx) => (
-                  <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
-              <h4 className="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2 flex items-center gap-2">
-                <Award className="w-4 h-4 text-amber-500" />
-                AI Engineering tools
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {resumeData.skills.ai.map((s, idx) => (
-                  <span key={idx} className="px-3 py-1.5 bg-slate-50 border border-slate-150 text-slate-700 rounded-lg text-xs font-semibold font-mono">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderSkills();
       case "cloud":
-        return (
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
-                <Cloud className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-950 text-base">AWS Cloud Infrastructure</h4>
-                <p className="text-xs text-slate-500 font-medium">Experienced in constructing fully automated, serverless, and robust hosting environments on Amazon Web Services.</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-              {resumeData.skills.cloud.map((service, idx) => (
-                <div key={idx} className="p-3 bg-slate-50 border border-slate-150 rounded-lg text-center space-y-1">
-                  <span className="text-xs font-bold text-slate-800 font-mono">{service}</span>
-                  <p className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">AWS Platform</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-4 bg-slate-50 border border-slate-250/50 rounded-xl space-y-1.5">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">Featured Cloud Integration:</span>
-              <p className="text-xs text-slate-600 leading-relaxed font-semibold">
-                Designed secure WhatsApp Meta receptors running serverless AWS Lambda pipelines triggered by API Gateway endpoints with Cognito Identity and S3 backups.
-              </p>
-            </div>
-          </div>
-        );
-
+        return renderCloud();
       case "architecture":
-        return (
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-violet-50 text-violet-600 rounded-xl shrink-0">
-                <Layers className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-950 text-base">Enterprise Systems Architecture</h4>
-                <p className="text-xs text-slate-500 font-medium">Designing maintainable, decoupled architectures before writing code. Focus on clean domain boundaries and reuse.</p>
-              </div>
-            </div>
-
-            <div className="space-y-3.5 pt-2">
-              <div className="flex gap-3 items-start text-xs sm:text-sm text-slate-600 leading-relaxed">
-                <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
-                <span className="font-semibold text-slate-700">Refactored node configurations across systems to transition flawlessly from Node.js 14 backends to modern Node.js 20 frameworks.</span>
-              </div>
-              <div className="flex gap-3 items-start text-xs sm:text-sm text-slate-600 leading-relaxed">
-                <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
-                <span className="font-semibold text-slate-700">Designed structured database models (MongoDB, MySQL, and PostgreSQL) supporting scalable entity schemas with zero runtime performance hits.</span>
-              </div>
-              <div className="flex gap-3 items-start text-xs sm:text-sm text-slate-600 leading-relaxed">
-                <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" />
-                <span className="font-semibold text-slate-700">Architected highly resilient Spain Mining digital platform handling mission-critical, real-time enterprise operations.</span>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderArchitecture();
       case "mobile":
-        return (
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
-                <Smartphone className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-950 text-base">Mobile Development & Support</h4>
-                <p className="text-xs text-slate-500 font-medium">Building and maintaining hybrid mobile capabilities and production configurations for Android and iOS devices.</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-50 border border-slate-150 rounded-xl space-y-1">
-                <span className="font-bold text-slate-800 text-xs sm:text-sm">Android Applications</span>
-                <p className="text-xs text-slate-500 font-medium leading-relaxed">Production deployments, client-side caching integrations, and device configurations for enterprise users.</p>
-              </div>
-              <div className="p-4 bg-slate-50 border border-slate-150 rounded-xl space-y-1">
-                <span className="font-bold text-slate-800 text-xs sm:text-sm">iOS Applications</span>
-                <p className="text-xs text-slate-500 font-medium leading-relaxed">App Store deployment pipeline management, push notifications delivery, and responsive native UI layout design.</p>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderMobile();
       case "leadership":
-        return (
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0">
-                <Award className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-950 text-base">Technical Leadership & DevOps Referent</h4>
-                <p className="text-xs text-slate-500 font-medium">Leading migrations, managing stakeholder expectations, and acting as DevOps referent inside ICL.</p>
-              </div>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <div className="p-4 bg-slate-50 border border-slate-150 rounded-lg flex gap-3 items-start">
-                <span className="px-2.5 py-1 bg-white border border-slate-200 text-indigo-700 font-bold font-mono text-xs rounded uppercase tracking-wider shrink-0">
-                  DevOps
-                </span>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
-                  Serving as DevOps Referent. Standardizing CI/CD with Jenkins, containerizing infrastructure using Docker, and optimizing deployment speeds.
-                </p>
-              </div>
-              <div className="p-4 bg-slate-50 border border-slate-150 rounded-lg flex gap-3 items-start">
-                <span className="px-2.5 py-1 bg-white border border-slate-200 text-indigo-700 font-bold font-mono text-xs rounded uppercase tracking-wider shrink-0">
-                  Hitech
-                </span>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
-                  Operating as an elite Hitech Contractor inside ICL, navigating complex enterprise hierarchies to deploy high-value platform modernizations.
-                </p>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderLeadership();
       case "security":
-        return (
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-rose-50 text-rose-600 rounded-xl shrink-0">
-                <ShieldAlert className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-950 text-base">Security & Authentication Standards</h4>
-                <p className="text-xs text-slate-500 font-medium">Securing APIs, configuring identity providers, and preventing standard authorization bypass issues.</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-lg space-y-1">
-                <span className="text-xs font-bold text-slate-900 block font-mono">OAuth2 & MSAL</span>
-                <p className="text-[10px] text-slate-500 font-medium">Standardized client-side and server-side federation protocols.</p>
-              </div>
-              <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-lg space-y-1">
-                <span className="text-xs font-bold text-slate-900 block font-mono">Cognito Login</span>
-                <p className="text-[10px] text-slate-500 font-medium">Passwordless and multi-factor authentication implementations.</p>
-              </div>
-              <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-lg space-y-1">
-                <span className="text-xs font-bold text-slate-900 block font-mono">API Security</span>
-                <p className="text-[10px] text-slate-500 font-medium">Lambda Authorizers, signature verifications, and CORS protection policies.</p>
-              </div>
-            </div>
-          </div>
-        );
-
+        return renderSecurity();
       default:
         return null;
     }
@@ -299,7 +306,7 @@ export default function ExperienceExplorer() {
   return (
     <div className="space-y-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-slate-200 pb-5">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-slate-200 pb-5 print:hidden">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-xs font-semibold tracking-wider uppercase font-mono">
             <span>Section 2: Experience Matrix</span>
@@ -339,8 +346,8 @@ export default function ExperienceExplorer() {
         </div>
       </div>
 
-      {/* Main Content Render area */}
-      <div className="min-h-[280px]">
+      {/* Main Content Render area (Web Only) */}
+      <div className="min-h-[280px] print:hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
@@ -354,8 +361,67 @@ export default function ExperienceExplorer() {
         </AnimatePresence>
       </div>
 
+      {/* Print-Only Expanded Experience Layout */}
+      <div className="hidden print:block space-y-12">
+        <div className="space-y-4">
+          <h3 className="text-lg font-extrabold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+            <FolderKanban className="w-5 h-5 text-indigo-500" />
+            1. Featured Enterprise Projects
+          </h3>
+          {renderProjects()}
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-extrabold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+            <Code className="w-5 h-5 text-indigo-500" />
+            2. Technical Skills Inventory
+          </h3>
+          {renderSkills()}
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-extrabold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+            <Cloud className="w-5 h-5 text-indigo-500" />
+            3. AWS Cloud Infrastructure
+          </h3>
+          {renderCloud()}
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-extrabold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+            <Layers className="w-5 h-5 text-indigo-500" />
+            4. Enterprise Systems Architecture
+          </h3>
+          {renderArchitecture()}
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-extrabold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+            <Smartphone className="w-5 h-5 text-indigo-500" />
+            5. Mobile Development & Support
+          </h3>
+          {renderMobile()}
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-extrabold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+            <Award className="w-5 h-5 text-indigo-500" />
+            6. Technical Leadership & DevOps
+          </h3>
+          {renderLeadership()}
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-extrabold text-slate-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+            <ShieldAlert className="w-5 h-5 text-indigo-500" />
+            7. Security & Authentication Standards
+          </h3>
+          {renderSecurity()}
+        </div>
+      </div>
+
       {/* Corporate Metadata Footer Box */}
-      <div className="p-5 border border-slate-200/80 rounded-2xl bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="p-5 border border-slate-200/80 rounded-2xl bg-slate-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print:bg-white print:border-slate-200">
         <div>
           <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Current Employment Record</span>
           <h4 className="font-extrabold text-slate-900 text-sm mt-0.5">ICL &middot; Senior Full Stack Engineer</h4>
